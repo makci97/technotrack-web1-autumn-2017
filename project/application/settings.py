@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
-    # 'blog.apps.BlogConfig',
-    # 'comments.apps.CommentsConfig',
-    # 'post.apps.PostConfig',
+    'blog.apps.BlogConfig',
+    'comments.apps.CommentsConfig',
+    'post.apps.PostConfig',
 ]
 
 AUTH_USER_MODEL = 'core.User'
