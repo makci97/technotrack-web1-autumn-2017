@@ -38,7 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
+    # 'blog.apps.BlogConfig',
+    # 'comments.apps.CommentsConfig',
+    # 'post.apps.PostConfig',
 ]
+
+AUTH_USER_MODEL = 'core.User'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/Users/maxim/code/git/tehnotrack/sem_1/technotrack-web1-autumn-2017/project/media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
+from django.conf import settings
 
 from core import views
 
@@ -25,3 +26,7 @@ urlpatterns = [
     url(r'^post_page/(?P<id>\d+)$', views.post_page, name='post_page'),
     url(r'^user_profile/$', views.user_profile, name='user_profile'),
 ]
+
+if settings.DEBUG is True:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
