@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <title>List of blogs</title>
+{% endblock title %}
+
+{% block content %}
+    <a href="/">Back to index</a>
+    <h1>List of all blogs:</h1>
+    {% for blog in blogs %}
+        <div>
+            <div><a href="{% url 'blog:blog_detail' pk=blog.id %} ">{{ blog.title }}</a></div>
+            <div>{{ blog.description }}</div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock content%}

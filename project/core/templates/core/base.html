@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% block title %}
+            <title>Title</title>
+        {% endblock title %}
+    </head>
+    <body>
+        {% block menu %}
+            <h2>This is main menu</h2>
+        {% endblock menu%}
+
+        {% block content %}
+            <h2>This is content</h2>
+        {% endblock content%}
+
+        {% include "core/footer.html" %}
+    </body>
+</html>
+

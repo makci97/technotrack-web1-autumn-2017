@@ -18,7 +18,7 @@ class Comment(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return u'{} ({})'.format(self.author, self.text)
+        return u'{}\n{}: {}'.format(self.created_at, self.author, self.text)
 
     class Meta:
         ordering = '-id',

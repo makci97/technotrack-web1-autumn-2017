@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <title>Post</title>
+{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'blog:blog_detail' pk=post.blog.id %}">Back to blog</a>
+    <br>
+    Post_id: {{post.id}}
+    <br>
+    Categories:
+    <ul>
+    {%  for cat in post.categories.all %}
+        <li>
+        {{ cat.title }}
+        </li>
+    {% endfor %}
+    </ul>
+    <h1>Title: {{post.title}}</h1>
+
+    <h2>Text of post:</h2>
+    {{post.text}}
+    <br>
+
+    <h2>Comments:</h2>
+    {% for comment in post.comments.all %}
+        <div>
+            <div>{{comment.created_at|date:"D d M Y"}}</div>
+            <div>{{comment.text}}</div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock content%}

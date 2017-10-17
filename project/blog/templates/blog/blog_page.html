@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <title>Blog</title>
+{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'blog:blog_list' %}">Back to list of blogs</a>
+    <br>
+    Blog_id: {{blog.id}}
+    <h1>Title: {{blog.title}}</h1>
+
+    <h1>List of all posts:</h1>
+    {% for post in blog.posts.all %}
+        <div>
+            <div><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></div>
+            <div>{{ post.text }}</div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock content%}

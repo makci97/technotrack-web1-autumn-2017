@@ -1,26 +1,14 @@
 from django.shortcuts import render
 
+from blog.models import Blog
+from comments.models import Comment
+from post.models import Post
+
 
 def index(request):
-    context = {}
-    return render(request, 'index.html', context)
-
-def blogs(request):
-    context = {}
-    return render(request, 'blogs.html', context)
-
-def posts(request):
-    context = {}
-    return render(request, 'posts.html', context)
-
-def post_page(request, id):
-    context = {'Id' : id}
-    return render(request, 'post_page.html', context)
-
-def user_profile(request):
-    context = {}
-    return render(request, 'user_profile.html', context)
-
-
-
-
+    context = {
+        'Blog_count': Blog.objects.all().count(),
+        'Post_count': Post.objects.all().count(),
+        'Comment_count': Comment.objects.all().count()
+    }
+    return render(request, 'core/index.html', context)

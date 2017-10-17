@@ -12,6 +12,7 @@ from core.models import Category
 class Post(models.Model):
     blog = models.ForeignKey(Blog, related_name='posts')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    title = models.CharField(max_length=255, default='')
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

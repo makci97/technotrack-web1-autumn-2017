@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <title>Welcome!</title>
+{% endblock title %}
+
+{% block content %}
+    <a href="blogs/">List of blogs</a><br>
+    Blogs count: {{ Blog_count }}<br>
+    Posts count: {{ Post_count }}<br>
+    Comments count: {{ Comment_count }}<br>
+{% endblock content%}
