@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-    <a href="blogs/">List of blogs</a><br>
+    <a href="{% url 'blog:blog_list' %} ">List of blogs</a><br>
     Blogs count: {{ Blog_count }}<br>
     Posts count: {{ Post_count }}<br>
     Comments count: {{ Comment_count }}<br>

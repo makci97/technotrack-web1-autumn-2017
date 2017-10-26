@@ -8,8 +8,14 @@
     </head>
     <body>
         {% block menu %}
-            <h2>This is main menu</h2>
+            {% if user.is_anonymous %}
+                {% include "core/menu_anon.html" %}
+            {% elif user.is_authenticated %}
+                {% include "core/menu_auth.html" %}
+            {% endif %}
         {% endblock menu%}
+
+        <hr>
 
         {% block content %}
             <h2>This is content</h2>

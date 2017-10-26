@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    <title>Logout</title>
+{% endblock title %}
+
+{% block content %}
+    <p>Logged out successful!</p>
+    <a href="{% url 'core:index' %}">Main page</a>
+{% endblock content%}
