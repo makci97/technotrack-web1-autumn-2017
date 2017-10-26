@@ -20,6 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^auth/', include('auth_and_reg.urls', namespace="auth")),
     url(r'^blogs/', include('blog.urls', namespace="blog")),
     url(r'^comments/', include('comments.urls', namespace="comments")),
     url(r'^', include('core.urls', namespace="core")),
