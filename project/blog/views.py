@@ -14,3 +14,10 @@ class BlogDetail(DetailView):
     template_name = "blog/blog_page.html"
     context_object_name = 'blog'
     model = Blog
+
+    def get_context_data(self, **kwargs):
+        context = super(BlogDetail, self).get_context_data(**kwargs)
+        context['can_create'] = (
+            self.request.user.id == self.object.author.id
+        )
+        return context

@@ -23,6 +23,12 @@
     {{post.text}}
     <br>
 
+    {% if can_edit %}
+        <p>
+            <a href="{% url 'blog:edit_post' blog_id=post.blog.id pk=post.id %}">Edit the post</a>
+        </p>
+    {% endif %}
+
     <h2>Comments:</h2>
     {% for comment in post.comments.all %}
         <div>
