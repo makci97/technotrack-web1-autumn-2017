@@ -8,10 +8,13 @@
     <a href="/">Back to index</a>
     <h1>List of all blogs:</h1>
     {% for blog in blogs %}
-        <div>
-            <div><a href="{% url 'blog:blog_detail' pk=blog.id %} ">{{ blog.title }}</a></div>
-            <div>{{ blog.description }}</div>
-        </div>
-        <br>
+        <ul>
+            <li>
+                <h3><a href="{% url 'blog:blog_detail' pk=blog.id %} ">{{ blog.title }}</a></h3>
+                <div>{{ blog.description }}</div>
+            </li>
+        </ul>
     {% endfor %}
+
+    {% include "core/page_navigator.html" %}
 {% endblock content%}

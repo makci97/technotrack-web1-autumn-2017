@@ -21,11 +21,22 @@
 {#    {% endif %}#}
 
     <h1>List of all posts:</h1>
-    {% for post in blog.posts.all %}
-        <div>
-            <div><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></div>
-            <div>{{ post.text }}</div>
-        </div>
-        <br>
+    {% for post in posts %}
+        <ul>
+            <li>
+                <h3><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></h3>
+                <div>{{ post.text }}</div>
+            </li>
+        </ul>
     {% endfor %}
+
+{#    {% for post in blog.posts.all %}#}
+{#        <div>#}
+{#            <div><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></div>#}
+{#            <div>{{ post.text }}</div>#}
+{#        </div>#}
+{#        <br>#}
+{#    {% endfor %}#}
+
+    {% include "core/page_navigator.html" %}
 {% endblock content%}
