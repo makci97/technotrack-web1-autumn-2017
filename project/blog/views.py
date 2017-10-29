@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 
 from blog.models import Blog
+from post.forms import PostsListForm
 from post.models import Post
 
 
@@ -22,17 +23,24 @@ class BlogDetail(ListView):
         self.blog = get_object_or_404(Blog.objects.all(), id=kwargs.get('pk'))
         return super(BlogDetail, self).dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        queryset = super(BlogDetail, self).get_queryset()
+        self.form = PostsListForm(self.request.GET)
+        if self.form.is_valid():
+            if self.form.cleaned_data['order_by']:
+                queryset = queryset.order_by(self.form.cleaned_data['order_by'])
+            if self.form.cleaned_data['search']:
+                queryset = queryset.filter(title=self.form.cleaned_data['search'])
+        return queryset.filter(blog=self.blog)
+
     def get_context_data(self, **kwargs):
         context = super(BlogDetail, self).get_context_data(**kwargs)
         context['blog'] = self.blog
+        context['form'] = self.form
         context['can_create'] = (
             self.request.user.id == self.blog.author.id
         )
         return context
-
-    def get_queryset(self):
-        queryset = super(BlogDetail, self).get_queryset()
-        return queryset.filter(blog=self.blog)
 
 
 # class BlogDetail(DetailView):

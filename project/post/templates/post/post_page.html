@@ -31,10 +31,26 @@
 
     <h2>Comments:</h2>
     {% for comment in post.comments.all %}
-        <div>
-            <div>{{comment.created_at|date:"D d M Y"}}</div>
-            <div>{{comment.text}}</div>
-        </div>
-        <br>
+        {% if not comment.is_deleted %}
+            <div>
+                <div>
+                    <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
+                    {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
+                        , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
+                    {% endif %}
+                </div>
+                <div>{{comment.text}}</div>
+            </div>
+        {% endif %}
     {% endfor %}
+
+    <h2>Create new comment:</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Create comment">
+    </form>
+
+
+
 {% endblock content%}

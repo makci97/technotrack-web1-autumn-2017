@@ -14,11 +14,16 @@
     </p>
     <h1>Title: {{blog.title}}</h1>
 
-{#    {% if can_create %}#}
+    <form action="" method="get">
+        {{ form }}
+        <input type="submit" value="Search">
+    </form>
+
+    {% if can_create %}
         <p>
             <a href="{% url 'blog:new_post' blog_id=blog.id %}">Create new post</a>
         </p>
-{#    {% endif %}#}
+    {% endif %}
 
     <h1>List of all posts:</h1>
     {% for post in posts %}
@@ -29,14 +34,6 @@
             </li>
         </ul>
     {% endfor %}
-
-{#    {% for post in blog.posts.all %}#}
-{#        <div>#}
-{#            <div><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></div>#}
-{#            <div>{{ post.text }}</div>#}
-{#        </div>#}
-{#        <br>#}
-{#    {% endfor %}#}
 
     {% include "core/page_navigator.html" %}
 {% endblock content%}
