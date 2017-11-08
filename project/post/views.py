@@ -1,3 +1,5 @@
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseForbidden
 from django.shortcuts import reverse, get_object_or_404, redirect, render
 from django.views.generic import CreateView, UpdateView
 
@@ -27,54 +29,16 @@ def post_detail(request, pk):
     return render(request, 'post/post_page.html', context)
 
 
-# class PostDetail(CreateView):
-#     model = Comment
-#     form_class = CommentForm
-#     template_name = 'post/post_page.html'
-#     context_object_name = 'comment'
-#     fields = 'text'
-#
-#     post = models.ForeignKey(Post, related_name='comments')
-#     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         self.post = get_object_or_404(Post.objects.all(), id=kwargs.get('pk'))
-#         return super(PostDetail, self).dispatch(request, *args, **kwargs)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(PostDetail, self).get_context_data(**kwargs)
-#         context['can_edit'] = (
-#             self.request.user.id == self.object.blog.author.id == self.object.author.id
-#         )
-#         context['post'] = self.post
-#         return context
-#
-#     form.is_valid()
-#
-#     # def get_success_url(self):
-#     #     return reverse('post:post_detail', kwargs={'pk': self.object.pk})
-#
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user
-#         form.instance.blog = self.blog
-#         return super(NewPost, self).form_valid(form)
-
-
-class NewPost(CreateView): #, UserPassesTestMixin):
+class NewPost(CreateView):
     template_name = 'post/new_post.html'
     model = Post
     fields = 'title', 'text', 'categories'
 
-    def test_func(self):
-        return self.can_create
-
     def dispatch(self, request, blog_id=None, *args, **kwargs):
         self.blog = get_object_or_404(Blog.objects.all(), id=blog_id)
-        self.can_create = (
-            self.request.user.id == self.blog.author.id
-        )
-        if not self.test_func():
-            return redirect('blog:blog_detail', pk=blog_id)
+        can_create = self.request.user.id == self.blog.author.id
+        if not can_create:
+            return HttpResponseForbidden()
         return super(NewPost, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -91,28 +55,26 @@ class NewPost(CreateView): #, UserPassesTestMixin):
         return super(NewPost, self).form_valid(form)
 
 
-class EditPost(UpdateView): #, UserPassesTestMixin):
+class EditPost(UpdateView):
     template_name = 'post/edit_post.html'
     model = Post
     fields = 'title', 'text', 'categories'
 
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super(EditPost, self).dispatch(request, *args, **kwargs)
+        except PermissionDenied:
+            return HttpResponseForbidden()
 
-    def test_func(self):
-        return self.can_edit
-
-    def dispatch(self, request, blog_id=None, *args, **kwargs):
-        # print(EditPost.mro())
-        self.blog = get_object_or_404(Blog.objects.all(), id=blog_id)
-        self.can_edit = (
-            self.request.user.id == self.blog.author.id == self.object.author.id
-        )
-        if not self.test_func():
-            return redirect('post:post_detail', pk=kwargs.get('pk'))
-        return super(EditPost, self).dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if self.request.user.id != obj.blog.author.id:
+            raise PermissionDenied()
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super(EditPost, self).get_context_data(**kwargs)
-        context['blog_id'] = self.blog.id
+        context['blog_id'] = self.object.blog.id
         return context
 
     def get_success_url(self):

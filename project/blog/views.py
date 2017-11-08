@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, CreateView
 
 from blog.models import Blog
 from post.forms import PostsListForm
@@ -43,25 +46,15 @@ class BlogDetail(ListView):
         return context
 
 
-# class BlogDetail(DetailView):
-#     model = Blog
-#     template_name = "blog/blog_page.html"
-#     context_object_name = 'blog'
-#     paginate_by = 2
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(BlogDetail, self).get_context_data(**kwargs)
-#         context['can_create'] = (
-#             self.request.user.id == self.object.author.id
-#         )
-#         return context
-#
-#     def get_object(self, queryset=None):
-#         if queryset is None:
-#             queryset = super(BlogDetail, self).get_queryset()
-#         return super(BlogDetail, self).get_object(queryset)
-#
-#     def get_queryset(self):
-#         # return Post.objects.all()
-#         print(self.object)
-#         return self.object.posts.all()
+@method_decorator(login_required(login_url='auth:login'), name='dispatch')
+class NewBlog(CreateView):
+    template_name = 'blog/new_blog.html'
+    model = Blog
+    fields = 'title', 'description', 'categories'
+
+    def get_success_url(self):
+        return reverse('blog:blog_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(NewBlog, self).form_valid(form)
