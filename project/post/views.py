@@ -1,10 +1,11 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from django.shortcuts import reverse, get_object_or_404, redirect, render
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
 from blog.models import Blog
 from comments.forms import CommentForm
+from post.forms import PostsListForm
 from post.models import Post
 
 
@@ -24,7 +25,7 @@ def post_detail(request, pk):
         form = CommentForm(user=request.user)
     context['form'] = form
     context['can_edit'] = (
-        request.user.id == post.blog.author.id == post.author.id
+        request.user.id == post.blog.author.id
     )
     return render(request, 'post/post_page.html', context)
 
@@ -82,5 +83,29 @@ class EditPost(UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.blog = self.blog
+        form.instance.blog = self.object.blog
         return super(EditPost, self).form_valid(form)
+
+
+class PostList(ListView):
+    model = Post
+    template_name = "post/posts_list.html"
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super(PostList, self).get_queryset()
+        self.form = PostsListForm(self.request.GET)
+        if self.form.is_valid():
+            if self.form.cleaned_data['order_by']:
+                queryset = queryset.order_by(self.form.cleaned_data['order_by'])
+            if self.form.cleaned_data['search']:
+                queryset = queryset.filter(title__contains=self.form.cleaned_data['search'])
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        context['posts_count'] = Post.objects.all().count()
+        context['form'] = self.form
+        return context
+

@@ -1,12 +1,18 @@
 {% extends "core/base.html" %}
 
 {% block title %}
-    <title>List of blogs</title>
+    <title>User</title>
 {% endblock title %}
+
 
 {% block content %}
     <div class="row">
         <article class="col-sm-8">
+            <nav id="pagination">
+                <span class="page-numbers current ">Blogs</span>
+                <a class="page-numbers" href="{% url 'core:user_posts_list' pk=user.id %}">Posts</a>
+            </nav>
+
             {% for blog in blogs %}
                 <article class="card">
                     <h3><a href="{% url 'blog:blog_detail' pk=blog.id %} ">{{ blog.title }}</a></h3>
@@ -14,17 +20,22 @@
                     <div>{{ blog.description }}</div>
                 </article>
             {% endfor %}
+
+            {% include "core/page_navigator.html" %}
         </article>
+
 
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
-                <h3>Info</h3>
-                <p>Blogs count: {{ blogs_count }}</p>
-                <br>
+                <h3>User: {{ user.username }}</h3>
+                <p>Blogs: {{ blogs_count }}</p>
+                <p>Posts: {{ posts_count }}</p>
 
-                <p align="center">
-                    <a href="{% url 'blog:new_blog'%}">Create new blog</a>
-                </p>
+                {% if can_edit %}
+                    <p align="center">
+                        <a href="{% url 'core:edit_user' pk=user.id %}">Edit profile</a>
+                    </p>
+                {% endif %}
             </section>
 
             <form method="get" class="sidebar-module sidebar-module-inset card">
@@ -33,13 +44,10 @@
 
                 <div class="form-group" align="center">
                     <button type="submit" class="btn btn-success">
-                        Search
+                        <span class="glyphicon glyphicon-ok"></span> Search
                     </button>
                 </div>
             </form>
         </aside>
-
     </div>
-
-    {% include "core/page_navigator.html" %}
 {% endblock content%}

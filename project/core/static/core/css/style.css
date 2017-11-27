@@ -1,0 +1,285 @@
+/* ------------------------ buttons ----------------------*/
+.btn {
+	font-family: "Open Sans", helvetica, arial, sans-serif;
+	font-size: 13px;
+	cursor: pointer;
+	padding: 0 26px;
+	line-height: 38px;
+	display: inline-block;
+	margin: 5px 10px 4px 5px;
+	height: 40px;
+	text-decoration: none;
+	letter-spacing: 1px;
+	font-weight: 700;
+	outline: none;
+	position: relative;
+	background: #80B959;
+	color: #fff;
+	border: 1px solid #80B959;
+	border-radius: 4px;
+}
+.btn:hover,
+.btn:active,
+.btn:focus {
+	color: #fff;
+	top: 0;
+	text-decoration: none;
+	background-color: #679E42;
+	box-shadow: none;
+	border: 1px solid #679E42;
+}
+.btn.outline-white {
+	background: transparent;
+	border: 1px solid #FFF;
+	box-shadow: none;
+	color: #FFF;
+	text-decoration: none;
+}
+.btn.outline-white:hover,
+.btn.outline-white:focus {
+	background: #FFF;
+	border-color: #FFF;
+	color:#383838;
+	top:0;
+	text-decoration: none;
+}
+.btn i {
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+}
+.btn i:before {
+	 line-height: 39px;
+}
+.btn i.left {
+	padding-right: 10px;
+}
+.btn i.right {
+	padding-left: 10px;
+}
+.btn span {
+	line-height: 22px;
+	vertical-align: text-bottom;
+}
+
+/* ------------------------ blog nav ----------------------*/
+/*
+ * Masthead for nav
+ */
+
+.blog-masthead,
+footer {
+    background-color: #417EE6;
+    -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+          box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+}
+
+.blog-nav {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+/* Nav links */
+.blog-nav-item {
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    font-weight: 500;
+    color: #F4F4F4;
+}
+
+a.blog-nav-username {
+    padding: 10px 10px 10px 0px;
+    font-weight: 700 !important;
+}
+
+a.blog-nav-item {
+    font-weight: 900;
+}
+
+a:hover.blog-nav-item,
+a:focus.blog-nav-item  {
+    color: #383838;
+    text-decoration: none;
+}
+
+/* Active state gets a caret at the bottom */
+.blog-nav .active {
+  color: #fff;
+}
+.blog-nav .active:after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -5px;
+    vertical-align: middle;
+    content: " ";
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid;
+    border-left: 5px solid transparent;
+}
+
+
+/* Sidebar modules for boxing content */
+.sidebar-module {
+  padding: 15px;
+  margin: 0 -15px 15px;
+}
+.sidebar-module-inset {
+  padding: 15px;
+  /*background-color: #f5f5f5;*/
+  border-radius: 4px;
+}
+.sidebar-module-inset p:last-child,
+.sidebar-module-inset ul:last-child,
+.sidebar-module-inset ol:last-child {
+  margin-bottom: 0;
+}
+
+.card {
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+
+/* ------------------------ header ----------------------*/
+main>header {
+    padding: 20px 0px;
+}
+
+.blog-title {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 60px;
+    font-weight: normal;
+}
+
+/* ------------------------ comment ----------------------*/
+.comment-content {
+    position: relative;
+    margin-bottom: 24px;
+    transition: all .2s ease-in-out;
+}
+
+.comment-body {
+    overflow: hidden;
+}
+
+.comment-header {
+    line-height: 1;
+    font-size: 13px;
+    padding-right: 46px;
+    margin-bottom: 3px;
+}
+
+.comment-message-container {
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+    width: 100%;
+}
+
+.avatar {
+    float: left;
+    margin-right: 12px;
+}
+
+.avatar img {
+    display: block;
+    border-radius: 3px;
+    width: 48px;
+    height: 48px;
+}
+
+
+/* ------------------------ footer ----------------------*/
+footer {
+	position: relative;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 1rem;
+	background-color: #efefef;
+	text-align: center;
+}
+
+/* ------------------------ pagination ----------------------*/
+#pagination {
+	font-family: "Open Sans", helvetica, arial, sans-serif;
+	margin: 16px 0;
+	text-align: center;
+}
+#pagination a {
+	cursor: pointer;
+}
+#pagination a,
+#pagination span {
+	font-size: 13px;
+	padding: 0 17px;
+	line-height: 38px;
+	display: inline-block;
+	margin: 0 10px 4px 0;
+	height: 40px;
+	text-decoration: none;
+	letter-spacing: 1px;
+	font-weight: 700;
+	outline: none;
+	position: relative;
+	background: #FFF;
+	color: #7EB759;
+	border: 1px solid #80B959;
+	border-radius: 4px;
+}
+#pagination span.current {
+	border: 1px solid #80B959;
+	background: #7EB759;
+	color: #FFF;
+}
+
+
+#pagination a:hover,
+#pagination a:active,
+#pagination a:focus {
+	color: #fff;
+	top: 0;
+	text-decoration: none;
+	background-color: #679E42;
+	box-shadow: none;
+	border: 1px solid #679E42;
+}
+
+
+/* ------------------------ other ----------------------*/
+.pull-right {
+    float: right;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 970px;
+  }
+}
+
+.help_text  {
+	color: grey;
+}
+
+body {
+    background-color: #F4F4F4;
+}
+
+a {
+    color: #4386F7;
+}
+
+a:hover {
+    /*color: #383838;*/
+    color: #335794;
+    text-decoration: none;
+}
+
+#D27846

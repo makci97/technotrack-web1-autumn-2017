@@ -5,13 +5,30 @@
 {% endblock title %}
 
 {% block content %}
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Login">
-    </form>
+    <div class="row">
+        <article class="col-sm-12">
+            <section class="card">
+                {% if form.errors %}
+                    <p>
+                        Your username and password didn't match. Please try again.
+                    </p>
+                {% endif %}
+
+                <h2>Login</h2>
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% include 'core/forms_render.html' %}
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <span class="glyphicon glyphicon-ok"></span> Login
+                        </button>
+                        <a href="{% url 'core:index' %}" class="btn btn-default">Cancel</a>
+                    </div>
+                </form>
+            </section>
+        </article>
+    </div>
 {% endblock content%}

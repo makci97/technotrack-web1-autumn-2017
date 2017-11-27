@@ -5,6 +5,12 @@
 {% endblock title %}
 
 {% block content %}
-    <p>Logged out successful!</p>
-    <a href="{% url 'core:index' %}">Main page</a>
+    <div class="row">
+        <article class="col-sm-12">
+            <section class="card">
+                <p>Logged out successful!</p>
+                <a href="{% url 'core:index' %}">Main page</a>
+            </section>
+        </article>
+    </div>
 {% endblock content%}

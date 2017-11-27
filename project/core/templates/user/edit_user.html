@@ -1,27 +1,28 @@
 {% extends "core/base.html" %}
 
 {% block title %}
-    <title>Sign up</title>
-{% endblock title %}
+    <title>Edit user</title>
+{%  endblock %}
 
 {% block content %}
     <div class="row">
         <article class="col-sm-12">
             <section class="card">
-                <h2>Sign up</h2>
-                <form method="post">
+                <a href="{% url 'core:user_blogs_list' pk=object.id%}">Back to the user</a>
+                <h1>Edit the profile:</h1>
+                <form action="" method="post">
                     {% csrf_token %}
 
                     {% include 'core/forms_render.html' %}
 
-                    <div class="form-group">
+                    <div class="form-group" align="center">
                         <button type="submit" class="btn btn-success">
-                            <span class="glyphicon glyphicon-ok"></span> Save
+                            Edit
                         </button>
-                        <a href="{% url 'core:index' %}" class="btn btn-default">Cancel</a>
                     </div>
                 </form>
             </section>
         </article>
     </div>
 {% endblock %}
+

@@ -5,9 +5,26 @@
 {% endblock title %}
 
 {% block content %}
-    <a href="{% url 'blog:blog_list' %} ">List of blogs</a><br>
-    <a href="{% url 'blog:new_blog' %} ">Create new blog</a><br>
-    Blogs count: {{ Blog_count }}<br>
-    Posts count: {{ Post_count }}<br>
-    Comments count: {{ Comment_count }}<br>
+    <div class="row">
+        <article class="col-sm-8">
+            <section class="card">
+                <h2>
+                    Добро пожаловать
+                </h2>
+                <p>
+                    Мы рады приветствовать вас на открытой платформе для создания блогов.
+                    Здесь вы можете <a href="{% url 'blog:new_blog' %} ">создать свой блог</a>
+                    или ознакомиться <a href="{% url 'blog:blog_list' %} ">с существующими</a>.
+                </p>
+            </section>
+        </article>
+        <aside class="col-sm-4">
+            <section class="sidebar-module sidebar-module-inset card">
+                <h3>Info</h3>
+                Blogs count: {{ Blog_count }}<br>
+                Posts count: {{ Post_count }}<br>
+                Comments count: {{ Comment_count }}<br>
+            </section>
+        </aside>
+    </div>
 {% endblock content%}

@@ -5,11 +5,23 @@
 {%  endblock %}
 
 {% block content %}
-    <a href="{% url 'core:index'%}">Back to the main page</a>
-    <h1>Create new blog:</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Create">
-    </form>
+    <div class="row">
+        <article class="col-sm-12">
+            <section class="card">
+                <h2>Create new blog:</h2>
+                <form action="" method="post">
+                    {% csrf_token %}
+
+                    {% include 'core/forms_render.html' %}
+                    <a href="{% url 'core:new_category'%}?next={{ request.get_full_path|urlencode }}">Add new category</a>
+
+                    <div class="form-group" align="center">
+                        <button type="submit" class="btn btn-success">
+                            Create blog
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </article>
+    </div>
 {% endblock %}

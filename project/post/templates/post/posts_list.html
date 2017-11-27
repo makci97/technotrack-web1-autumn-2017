@@ -1,17 +1,18 @@
 {% extends "core/base.html" %}
 
 {% block title %}
-    <title>List of blogs</title>
+    <title>List of posts</title>
 {% endblock title %}
 
 {% block content %}
     <div class="row">
         <article class="col-sm-8">
-            {% for blog in blogs %}
+            {% for post in posts %}
                 <article class="card">
-                    <h3><a href="{% url 'blog:blog_detail' pk=blog.id %} ">{{ blog.title }}</a></h3>
+                    <h3><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></h3>
+                    {{post.created_at|date:"D d M Y f"}}
                     <hr>
-                    <div>{{ blog.description }}</div>
+                    <div>{{ post.text }}</div>
                 </article>
             {% endfor %}
         </article>
@@ -19,16 +20,11 @@
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
                 <h3>Info</h3>
-                <p>Blogs count: {{ blogs_count }}</p>
-                <br>
-
-                <p align="center">
-                    <a href="{% url 'blog:new_blog'%}">Create new blog</a>
-                </p>
+                <p>Posts count: {{ posts_count }}</p>
             </section>
 
             <form method="get" class="sidebar-module sidebar-module-inset card">
-                <h3>Filtrate blogs</h3>
+                <h3>Filtrate posts</h3>
                 {% include 'core/forms_render.html' %}
 
                 <div class="form-group" align="center">

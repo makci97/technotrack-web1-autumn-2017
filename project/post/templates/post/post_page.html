@@ -5,52 +5,100 @@
 {% endblock title %}
 
 {% block content %}
-    <a href="{% url 'blog:blog_detail' pk=post.blog.id %}">Back to blog</a>
-    <br>
-    Post_id: {{post.id}}
-    <br>
-    Categories:
-    <ul>
-    {%  for cat in post.categories.all %}
-        <li>
-        {{ cat.title }}
-        </li>
-    {% endfor %}
-    </ul>
-    <h1>Title: {{post.title}}</h1>
+    <div class="row">
+        <article class="col-md-8">
+            <article class="card">
 
-    <h2>Text of post:</h2>
-    {{post.text}}
-    <br>
+                <section>
+                    <h2>{{post.title}}</h2>
+                    <hr>
+                    {{post.text}}
+                    <br><hr>
 
-    {% if can_edit %}
-        <p>
-            <a href="{% url 'post:edit_post' pk=post.id %}">Edit the post</a>
-        </p>
-    {% endif %}
-
-    <h2>Comments:</h2>
-    {% for comment in post.comments.all %}
-        {% if not comment.is_deleted %}
-            <div>
-                <div>
-                    <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
-                    {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
-                        , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
+                    {% if can_edit %}
+                        <p>
+                            <a href="{% url 'post:edit_post' pk=post.id %}">Edit the post</a>
+                        </p>
                     {% endif %}
-                </div>
-                <div>{{comment.text}}</div>
-            </div>
-        {% endif %}
-    {% endfor %}
+                </section>
 
-    <h2>Create new comment:</h2>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Create comment">
-    </form>
+                <section>
+                    <h2>Comments:</h2>
+                    {% for comment in post.comments.all %}
+                        {% if not comment.is_deleted %}
+                            <div class="comment-content">
+                                <div class="avatar">
+                                    <img src="{{ comment.author.avatar.url }}">
+                                </div>
+                                <div class="comment-body">
+                                    <div class="comment-header">
+                                        <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
+                                        {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
+                                            , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="comment-message-container">
+                                        {{comment.text}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    {% endfor %}
+                </section>
+
+                <section>
+                    <h2>Create new comment:</h2>
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                        {% include 'core/forms_render.html' %}
+
+                        <div class="form-group" align="center">
+                            <button type="submit" class="btn btn-success">
+                                Create comment
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </article>
+        </article>
 
 
+        <aside class="col-sm-4">
+            <section class="sidebar-module sidebar-module-inset card">
 
+                <header>
+                    <h1>
+                        <a href="{% url 'blog:blog_detail' pk=post.blog.id %}">{{ post.blog.title }}</a>
+                    </h1>
+                </header>
+                <hr>
+                <p>
+                    Author: <a href="{% url "core:user_blogs_list" pk=post.author.id %}">{{ user.username }}</a>
+                </p>
+                <p>
+                    Created at: {{ post.created_at|date:"D d M Y f" }}
+                </p>
+                <p>
+                Categories:
+                {%  for cat in post.categories.all %}
+                    {{ cat.title }}
+                    {% if not forloop.last %} | {% endif %}
+                {% endfor %}</p>
+
+                {% if can_edit %}
+                    <p align="center">
+                        <a href="{% url 'post:edit_post' pk=post.id %}">Edit post</a>
+                    </p>
+                {% endif %}
+            </section>
+        </aside>
+    </div>
 {% endblock content%}
+
+
+
+
+
+

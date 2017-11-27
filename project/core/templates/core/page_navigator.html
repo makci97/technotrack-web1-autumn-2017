@@ -1,19 +1,21 @@
-{% if is_paginated %}
-    {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
-    {% else %}
-        <span>&laquo;</span>
-    {% endif %}
-    {% for i in paginator.page_range %}
-        {% if page_obj.number == i %}
-            <span>{{ i }}</span>
+<nav id="pagination">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="page-numbers" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
         {% else %}
-            <a href="?page={{ i }}">{{ i }}</a>
+            <span class="page-numbers">&laquo;</span>
         {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
-    {% else %}
-        <span>&raquo;</span>
+        {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+                <span class="page-numbers current ">{{ i }}</span>
+            {% else %}
+                <a class="page-numbers" href="?page={{ i }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class="page-numbers" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+        {% else %}
+            <span class="page-numbers">&raquo;</span>
+        {% endif %}
     {% endif %}
-{% endif %}
+</nav>

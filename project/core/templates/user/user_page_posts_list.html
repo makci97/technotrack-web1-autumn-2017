@@ -1,12 +1,16 @@
 {% extends "core/base.html" %}
 
 {% block title %}
-    <title>Blog</title>
+    <title>User</title>
 {% endblock title %}
 
 {% block content %}
     <div class="row">
         <article class="col-sm-8">
+            <nav id="pagination">
+                <a class="page-numbers" href="{% url 'core:user_blogs_list' pk=user.id %}">Blogs</a>
+                <span class="page-numbers current ">Posts</span>
+            </nav>
             {% for post in posts %}
                 <article class="card">
                     <h3><a href="{% url 'post:post_detail' pk=post.id %} ">{{ post.title }}</a></h3>
@@ -22,18 +26,13 @@
 
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
-                <h3>{{ blog.title }}</h3>
-                <hr>
-                <p>
-                    Author: <a href="{% url "core:user_blogs_list" pk=blog.author.id %}">{{ user.username }}</a>
-                </p>
-                <p>
-                    {{ blog.description }}
-                </p>
+                <h3>User: {{ user.username }}</h3>
+                <p>Blogs: {{ blogs_count }}</p>
+                <p>Posts: {{ posts_count }}</p>
 
-                {% if can_create %}
+                {% if can_edit %}
                     <p align="center">
-                        <a href="{% url 'blog:new_post' blog_id=blog.id %}">Create new post</a>
+                        <a href="{% url 'core:edit_user' pk=user.id %}">Edit profile</a>
                     </p>
                 {% endif %}
             </section>
@@ -48,9 +47,6 @@
                     </button>
                 </div>
             </form>
-
-{#            <br>#}
-{#            <a href="{% url 'blog:blog_list' %}">Back to list of blogs</a>#}
         </aside>
     </div>
 {% endblock content%}
