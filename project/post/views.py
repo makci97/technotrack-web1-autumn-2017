@@ -6,6 +6,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from blog.models import Blog
 from comments.forms import CommentForm
 from comments.models import Comment
+from like.models import Like
 from post.forms import PostsListForm
 from post.models import Post
 
@@ -30,8 +31,7 @@ def post_detail(request, pk):
     )
     context['comments'] = Comment.objects.all().filter(post_id=post.id)
     for comment in context['comments']:
-        setattr(comment, 'likes_count', comment.get_likes_count())
-        setattr(comment, 'is_liked', comment.get_liked_by_user(request.user))
+        comment.create_like_fields(request.user)
     return render(request, 'post/post_page.html', context)
 
 

@@ -29,7 +29,7 @@
                 <h3>{{ blog.title }}</h3>
                 <hr>
                 <p>
-                    Author: <a href="{% url "core:user_blogs_list" pk=blog.author.id %}">{{ user.username }}</a>
+                    Author: <a href="{% url "core:user_blogs_list" pk=blog.author.id %}">{{ blog.author.username }}</a>
                 </p>
                 <p>
                     {{ blog.description }}

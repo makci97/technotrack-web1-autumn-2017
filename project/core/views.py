@@ -43,7 +43,7 @@ class UserPostsList(ListView):
     paginate_by = 3
 
     def dispatch(self, request, *args, **kwargs):
-        self.user = get_object_or_404(get_user_model().objects.all(), id=kwargs.get('pk'))
+        self.author = get_object_or_404(get_user_model().objects.all(), id=kwargs.get('pk'))
         return super(UserPostsList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -54,16 +54,16 @@ class UserPostsList(ListView):
                 queryset = queryset.order_by(self.form.cleaned_data['order_by'])
             if self.form.cleaned_data['search']:
                 queryset = queryset.filter(title__contains=self.form.cleaned_data['search'])
-        return queryset.filter(author_id=self.user.id)
+        return queryset.filter(author_id=self.author.id)
 
     def get_context_data(self, **kwargs):
         context = super(UserPostsList, self).get_context_data(**kwargs)
-        context['user'] = self.user
+        context['author'] = self.author
         context['form'] = self.form
-        context['blogs_count'] = Blog.objects.all().filter(author_id=self.user.id).count()
-        context['posts_count'] = Post.objects.all().filter(author_id=self.user.id).count()
+        context['blogs_count'] = Blog.objects.all().filter(author_id=self.author.id).count()
+        context['posts_count'] = Post.objects.all().filter(author_id=self.author.id).count()
         context['can_edit'] = (
-            self.request.user.id == self.user.id
+            self.request.user.id == self.author.id
         )
         return context
 
@@ -75,7 +75,7 @@ class UserBlogsList(ListView):
     paginate_by = 3
 
     def dispatch(self, request, *args, **kwargs):
-        self.user = get_object_or_404(get_user_model().objects.all(), id=kwargs.get('pk'))
+        self.author = get_object_or_404(get_user_model().objects.all(), id=kwargs.get('pk'))
         return super(UserBlogsList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -86,16 +86,16 @@ class UserBlogsList(ListView):
                 queryset = queryset.order_by(self.form.cleaned_data['order_by'])
             if self.form.cleaned_data['search']:
                 queryset = queryset.filter(title__contains=self.form.cleaned_data['search'])
-        return queryset.filter(author_id=self.user.id)
+        return queryset.filter(author_id=self.author.id)
 
     def get_context_data(self, **kwargs):
         context = super(UserBlogsList, self).get_context_data(**kwargs)
-        context['user'] = self.user
+        context['author'] = self.author
         context['form'] = self.form
-        context['blogs_count'] = Blog.objects.all().filter(author_id=self.user.id).count()
-        context['posts_count'] = Post.objects.all().filter(author_id=self.user.id).count()
+        context['blogs_count'] = Blog.objects.all().filter(author_id=self.author.id).count()
+        context['posts_count'] = Post.objects.all().filter(author_id=self.author.id).count()
         context['can_edit'] = (
-            self.request.user.id == self.user.id
+            self.request.user.id == self.author.id
         )
         return context
 

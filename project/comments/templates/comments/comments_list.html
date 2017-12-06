@@ -10,12 +10,10 @@
                     {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
                         , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
                     {% endif %}
-                    <span class="thumb_comment_count">{{ comment.likes_count }}</span>
-                    {% if comment.is_liked %}
-                        <span class="thumb_comment liked">like</span>
-                    {% else %}
-                        <span class="thumb_comment">like</span>
-                    {% endif %}
+
+                    <span class="pull-right" id="thumb_comment_{{ comment.id }}">
+                        {% include "like/like_comment.html" %}
+                    </span>
                 </div>
                 <div class="comment-message-container">
                     {{comment.text}}

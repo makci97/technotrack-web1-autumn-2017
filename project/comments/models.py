@@ -22,18 +22,9 @@ class Comment(models.Model):
     def __str__(self):
         return u'{}\n{}: {}'.format(self.created_at, self.author, self.text)
 
-    def get_liked_by_user(self, user):
-        if user.is_anonymous:
-            return False
-        content_type = ContentType.objects.get(app_label="comments", model="Comment")
-        like = Like.objects.all().filter(content_type=content_type, object_id=self.id)
-        if like.count() == 0 or not like.first().liked:
-            return False
-        return True
-
-    def get_likes_count(self):
-        content_type = ContentType.objects.get(app_label="comments", model="Comment")
-        return Like.objects.all().filter(content_type=content_type, object_id=self.id).count()
+    def create_like_fields(self, user):
+        self.likes_count = Like.get_likes_count_by_obj(self)
+        self.is_liked = Like.get_liked_by_user_and_obj(user, self)
 
     class Meta:
         ordering = '-id',

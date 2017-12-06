@@ -31,43 +31,36 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
-    $('.thumb_comment').click(function() {
-        var indx = $('.thumb_comment').index(this);
-        var objectId = $('.comment-content:eq('+indx+')').data('comment-id');
-        $.ajax({
-            type: 'POST',
-            url: '/likes/',
-            data: {
-                'content_type': 'Comment',
-                'object_id': objectId,
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: likeComment,
-            error: function () {
-                alert('error');
-            },
-            dataType: 'html'
-        });
+    function setOnClickForLikes() {
+            $('.thumb_comment').click(function() {
+                var indx = $('.thumb_comment').index(this);
+                var objectId = $('.comment-content:eq('+indx+')').data('comment-id');
+                $.ajax({
+                    type: 'POST',
+                    url: '/likes/',
+                    data: {
+                        'content_type': 'Comment',
+                        'object_id': objectId,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: likeComment,
+                    error: function () {
+                        alert('Need to login');
+                    },
+                    dataType: 'html'
+                });
 
-        function likeComment(data, textStatus, jqXHR){
-            console.log($.parseHTML(data));
-            // alert($(data)[0].outerHTML.find(".okey"));
-            // alert($(data).find(".okey").text());
-            var okey = $(data).find(".okey").text();
-            var likes_count = $(data).find(".likes_count").text();
-            // alert(okey);
-            // alert(likes_count);
-            if($.trim(data) == 'new' || $.trim(data) == 'true') {
-                $('.thumb_comment:eq('+indx+')').addClass( "liked" );
-                $('.thumb_comment_count:eq('+indx+')').addClass( "liked" );
-            } else if($.trim(data) == 'false') {
-                $('.thumb_comment:eq('+indx+')').removeClass( "liked" );
-            }
-        }
+                function likeComment(data, textStatus, jqXHR){
+                    like_span_id = '#thumb_comment_' + objectId;
+                    $(like_span_id).html(data);
+                    setOnClickForLikes();
+                }
 
-    });
-    // updateComments();
-    //window.setInterval(updateComments, 3000);
+            });
+    }
 
+    setOnClickForLikes();
+    updateComments();
 
+    window.setInterval(updateComments, 3000);
 });

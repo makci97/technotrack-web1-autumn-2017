@@ -17,6 +17,21 @@ class Like(models.Model):
     def __str__(self):
         return str(self.user.username)
 
+    @staticmethod
+    def get_liked_by_user_and_obj(user, liked_obj):
+        if user.is_anonymous:
+            return False
+        content_type = ContentType.objects.get_for_model(liked_obj)
+        like = Like.objects.all().filter(content_type=content_type, object_id=liked_obj.id)
+        if like.count() == 0 or not like.first().liked:
+            return False
+        return True
+
+    @staticmethod
+    def get_likes_count_by_obj(liked_obj):
+        content_type = ContentType.objects.get_for_model(liked_obj)
+        return Like.objects.all().filter(content_type=content_type, object_id=liked_obj.id, liked=True).count()
+
     class Meta:
         ordering = '-id',
         verbose_name = u'Like'

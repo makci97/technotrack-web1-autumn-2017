@@ -9,6 +9,7 @@ from comments.models import Comment
 from django.template.defaulttags import register
 from django.http import JsonResponse, HttpResponse
 
+from like.models import Like
 from post.models import Post
 
 
@@ -32,20 +33,8 @@ class CommentsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentsList, self).get_context_data(**kwargs)
-        # context['liked_comments_dict'] = {comment:  for comment in self.queryset for like in comment.like_set}
         for comment in context['comments']:
-            setattr(comment, 'likes_count', comment.get_likes_count())
-            setattr(comment, 'is_liked', comment.get_liked_by_user(self.request.user))
-
-        # context['likes_count_comments_dict'] = {
-        #     comment.id: Like.objects.all().filter(content_type=content_type, object_id=comment.id).count()
-        #     for comment in self.queryset
-        # }
-        # context['liked_comments_dict'] = {
-        #     comment.id: comment.get_liked_by_user(self.request.user)
-        #     for comment in self.queryset
-        # }
-        # print(context['likes_count_comments_dict'])
+            comment.create_like_fields(self.request.user)
         return context
 
 
@@ -106,4 +95,3 @@ class NewComment(AjaxableResponseMixin, CreateView):
         form.instance.author = self.request.user
         form.instance.post = Post.objects.all().filter(id=self.post_id).first()
         return super(NewComment, self).form_valid(form)
-        # return HttpResponse("OK")

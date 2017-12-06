@@ -10,7 +10,7 @@
         <article class="col-sm-8">
             <nav id="pagination">
                 <span class="page-numbers current ">Blogs</span>
-                <a class="page-numbers" href="{% url 'core:user_posts_list' pk=user.id %}">Posts</a>
+                <a class="page-numbers" href="{% url 'core:user_posts_list' pk=author.id %}">Posts</a>
             </nav>
 
             {% for blog in blogs %}
@@ -27,13 +27,13 @@
 
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
-                <h3>User: {{ user.username }}</h3>
+                <h3>User: {{ author.username }}</h3>
                 <p>Blogs: {{ blogs_count }}</p>
                 <p>Posts: {{ posts_count }}</p>
 
                 {% if can_edit %}
                     <p align="center">
-                        <a href="{% url 'core:edit_user' pk=user.id %}">Edit profile</a>
+                        <a href="{% url 'core:edit_user' pk=author.id %}">Edit profile</a>
                     </p>
                 {% endif %}
             </section>

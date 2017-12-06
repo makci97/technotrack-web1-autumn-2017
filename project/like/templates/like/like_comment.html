@@ -1,0 +1,6 @@
+<span class="thumb_comment_count">{{ comment.likes_count }}</span>
+{% if comment.is_liked %}
+    <span class="thumb_comment liked">like</span>
+{% else %}
+    <span class="thumb_comment">like</span>
+{% endif %}
