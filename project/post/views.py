@@ -5,6 +5,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 
 from blog.models import Blog
 from comments.forms import CommentForm
+from comments.models import Comment
 from post.forms import PostsListForm
 from post.models import Post
 
@@ -12,21 +13,25 @@ from post.models import Post
 def post_detail(request, pk):
     post = get_object_or_404(Post.objects.all(), id=pk)
     context = {'post': post}
-    if request.method == 'POST':
-        print(request.user)
-        form = CommentForm(request.POST, user=request.user)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.post = post
-            comment.save()
-            return redirect('post:post_detail', pk=pk)
-    else:
-        form = CommentForm(user=request.user)
-    context['form'] = form
+    context['post_id'] = post.id
+    # if request.method == 'POST':
+    #     form = CommentForm(request.POST, user=request.user)
+    #     if form.is_valid():
+    #         comment = form.save(commit=False)
+    #         comment.author = request.user
+    #         comment.post = post
+    #         comment.save()
+    #         return redirect('post:post_detail', pk=pk)
+    # else:
+    #     form = CommentForm(user=request.user)
+    # context['form'] = form
     context['can_edit'] = (
         request.user.id == post.blog.author.id
     )
+    context['comments'] = Comment.objects.all().filter(post_id=post.id)
+    for comment in context['comments']:
+        setattr(comment, 'likes_count', comment.get_likes_count())
+        setattr(comment, 'is_liked', comment.get_liked_by_user(request.user))
     return render(request, 'post/post_page.html', context)
 
 
@@ -47,8 +52,8 @@ class NewPost(CreateView):
         context['blog_id'] = self.blog.id
         return context
 
-    def get_success_url(self):
-        return reverse('post:post_detail', kwargs={'pk': self.object.pk})
+    # def get_success_url(self):
+    #     return reverse('post:post_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -78,8 +83,8 @@ class EditPost(UpdateView):
         context['blog_id'] = self.object.blog.id
         return context
 
-    def get_success_url(self):
-        return reverse('post:post_detail', kwargs={'pk': self.object.pk})
+    # def get_success_url(self):
+    #  return reverse('post:post_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         form.instance.author = self.request.user

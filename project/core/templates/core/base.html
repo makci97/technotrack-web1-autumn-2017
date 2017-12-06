@@ -8,7 +8,16 @@
         {% endblock title %}
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'core/css/style.css' %}">
-        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'chosen/chosen.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'chosen/bootstrap-chosen.css' %}">
+
+        <script src="https://code.jquery.com/jquery-3.2.1.js"
+                integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+                crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{#        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
+        <script type="text/javascript" src="{% static 'chosen/chosen.jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'core/js/base.js' %}"></script>
     </head>
     <body>
         {% block menu %}

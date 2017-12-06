@@ -15,10 +15,14 @@
                     <div>{{ post.text }}</div>
                 </article>
             {% endfor %}
+            {% if posts.count == 0 %}
+                <article class="card">
+                    <h2 align="center">Blog is empty</h2>
+                </article>
+            {% endif %}
 
             {% include "core/page_navigator.html" %}
         </article>
-
 
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
@@ -30,6 +34,12 @@
                 <p>
                     {{ blog.description }}
                 </p>
+                <p>
+                Categories:
+                {%  for cat in blog.categories.all %}
+                    {{ cat.title }}
+                    {% if not forloop.last %} | {% endif %}
+                {% endfor %}</p>
 
                 {% if can_create %}
                     <p align="center">

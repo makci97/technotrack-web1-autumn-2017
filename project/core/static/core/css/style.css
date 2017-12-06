@@ -282,4 +282,6 @@ a:hover {
     text-decoration: none;
 }
 
-#D27846
+.liked {
+	color: red;
+}

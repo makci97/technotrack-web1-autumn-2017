@@ -7,7 +7,24 @@
 {% for field in form.visible_fields %}
     <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field|add_class:'form-control' }}
+
+        {% if field|field_type == 'modelmultiplechoicefield' %}
+{#            .chosen-container-multi .chosen-choices#}
+{#            <div class="chosen-container-multi">#}
+            {{ field|add_class:'chosen-select' }}
+{#            </div>#}
+            <script>
+                $("#id_categories").chosen({
+                    disable_search_threshold: 10,
+                    no_results_text: "Oops, nothing found!",
+                    width: "95%"
+                });
+{#                $("#categories").chosen();#}
+{#                $('#{{ field.name }}').chosen()#}
+            </script>
+        {% else%}
+            {{ field|add_class:'form-control' }}
+        {% endif %}
         {% if field.help_text %}
             <small class="help_text">{{ field.help_text|safe }}</small>
         {% endif %}

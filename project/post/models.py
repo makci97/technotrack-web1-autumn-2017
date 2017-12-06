@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 from blog.models import Blog
 from core.models import Category
@@ -20,6 +21,9 @@ class Post(models.Model):
 
     def __str__(self):
         return u'{} ({})'.format(self.id, self.text)
+
+    def get_absolute_url(self):
+        return reverse('post:post_detail', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = '-id',

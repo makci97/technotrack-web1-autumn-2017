@@ -24,42 +24,19 @@
 
                 <section>
                     <h2>Comments:</h2>
-                    {% for comment in post.comments.all %}
-                        {% if not comment.is_deleted %}
-                            <div class="comment-content">
-                                <div class="avatar">
-                                    <img src="{{ comment.author.avatar.url }}">
-                                </div>
-                                <div class="comment-body">
-                                    <div class="comment-header">
-                                        <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
-                                        {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
-                                            , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
-                                        {% endif %}
-                                    </div>
-                                    <div class="comment-message-container">
-                                        {{comment.text}}
-                                    </div>
-                                </div>
-                            </div>
-
-                        {% endif %}
-                    {% endfor %}
+                    <div class="comments" data-comments-url="{% url "comments:comments_list" post_id=post.id %}">
+                        {% include "comments/comments_list.html" %}
+                    </div>
                 </section>
 
                 <section>
-                    <h2>Create new comment:</h2>
-                    <form action="" method="post">
-                        {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        <a href="{% url "comments:new_comment" post_id=post.id%}" class="open_dialog">Add new comment</a>
 
-                        {% include 'core/forms_render.html' %}
-
-                        <div class="form-group" align="center">
-                            <button type="submit" class="btn btn-success">
-                                Create comment
-                            </button>
-                        </div>
-                    </form>
+                        <div class="modal fade" tabindex="-1" role="dialog">
+                            {% include "comments/new_comment_dialog.html" %}
+                        </div><!-- /.modal -->
+                    {% endif %}
                 </section>
             </article>
         </article>
@@ -96,9 +73,3 @@
         </aside>
     </div>
 {% endblock content%}
-
-
-
-
-
-

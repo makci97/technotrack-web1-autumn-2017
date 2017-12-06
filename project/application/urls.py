@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^auth/', include('auth_and_reg.urls', namespace="auth")),
     url(r'^blogs/', include('blog.urls', namespace="blog")),
     url(r'^comments/', include('comments.urls', namespace="comments")),
+    url(r'^likes/', include('like.urls', namespace="like")),
     url(r'^', include('core.urls', namespace="core")),
     url(r'^posts/', include('post.urls', namespace="post")),
 ]

@@ -1,0 +1,27 @@
+{% for comment in comments %}
+    {% if not comment.is_deleted %}
+        <div class="comment-content" data-comment-id="{{ comment.id }}">
+            <div class="avatar">
+                <img src="{{ comment.author.avatar.url }}">
+            </div>
+            <div class="comment-body">
+                <div class="comment-header">
+                    <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
+                    {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
+                        , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
+                    {% endif %}
+                    <span class="thumb_comment_count">{{ comment.likes_count }}</span>
+                    {% if comment.is_liked %}
+                        <span class="thumb_comment liked">like</span>
+                    {% else %}
+                        <span class="thumb_comment">like</span>
+                    {% endif %}
+                </div>
+                <div class="comment-message-container">
+                    {{comment.text}}
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+{% endfor %}

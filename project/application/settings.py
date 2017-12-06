@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'blog.apps.BlogConfig',
     'comments.apps.CommentsConfig',
+    'like.apps.LikeConfig',
     'post.apps.PostConfig',
     'widget_tweaks',
 ]
