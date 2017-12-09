@@ -1,1 +1,0 @@
-Content of file test2.txt
