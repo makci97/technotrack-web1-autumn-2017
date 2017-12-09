@@ -28,7 +28,10 @@ SECRET_KEY = 'inu3k004gg9p-dv__d%my-19@jeeglx@cid(md_^+!vnr(&g4u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['demo-my-blog.herokuapp.com']
+ALLOWED_HOSTS = [
+    'demo-my-blog.herokuapp.com',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -50,8 +53,6 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'core.User'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = '/Users/maxim/code/git/tehnotrack/sem_1/technotrack-web1-autumn-2017/project/media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,6 +136,8 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.normpath(os.path.join(PROJECT_ROOT, 'staticfiles'))
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join('/'.join(PROJECT_ROOT.split('/')[:-1]), 'media')
+MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
