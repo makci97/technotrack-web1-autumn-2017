@@ -87,31 +87,10 @@ WSGI_APPLICATION = 'application.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# if ON_HEROKU:
-#     DATABASE_URL = 'postgresql:///postgresql'
-#     DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'db',
-#             'USER': 'root',
-#             'PASSWORD': '1',
-#             'HOST': 'localhost',
-#         }
-#     }
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=500, default="mysql://root:1@localhost:8000/db")
+    'default': dj_database_url.config(conn_max_age=500)
 }
-
-# DATABASES = {'default':  dj_database_url.config(default=os.getenv('DATABASE_URL'))}
-
-
-#
-#
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
 
 
 # Password validation
