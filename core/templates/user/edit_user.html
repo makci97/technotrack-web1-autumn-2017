@@ -10,7 +10,7 @@
             <section class="card">
                 <a href="{% url 'core:user_blogs_list' pk=object.id%}">Back to the user</a>
                 <h1>Edit the profile:</h1>
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% include 'core/forms_render.html' %}

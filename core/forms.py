@@ -1,10 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserChangeForm
 from django.core.files.images import get_image_dimensions
 
 
-class UserEditForm(UserChangeForm):
+class UserEditForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     avatar = forms.ImageField(required=False, help_text='Optional')
@@ -20,7 +19,7 @@ class UserEditForm(UserChangeForm):
             w, h = get_image_dimensions(avatar)
 
             # validate dimensions
-            max_width = max_height = 100
+            max_width = max_height = 2700
             if w > max_width or h > max_height:
                 raise forms.ValidationError(
                     u'Please use an image that is '

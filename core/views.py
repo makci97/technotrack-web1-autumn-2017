@@ -100,6 +100,7 @@ class UserBlogsList(ListView):
         return context
 
 
+@method_decorator(login_required(login_url='auth:login'), name='dispatch')
 class UserEdit(UpdateView):
     template_name = 'user/edit_user.html'
     model = get_user_model()
