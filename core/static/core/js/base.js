@@ -31,36 +31,32 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
-    function setOnClickForLikes() {
-            $('.thumb_comment').click(function() {
-                var indx = $('.thumb_comment').index(this);
-                var objectId = $('.comment-content:eq('+indx+')').data('comment-id');
-                $.ajax({
-                    type: 'POST',
-                    url: '/likes/',
-                    data: {
-                        'content_type': 'Comment',
-                        'object_id': objectId,
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-                    success: likeComment,
-                    error: function () {
-                        alert('Need to login');
-                    },
-                    dataType: 'html'
-                });
 
-                function likeComment(data, textStatus, jqXHR){
-                    like_span_id = '#thumb_comment_' + objectId;
-                    $(like_span_id).html(data);
-                    setOnClickForLikes();
-                }
+    $(document).on('click', '.thumb_comment', function (event) {
+        var indx = $('.thumb_comment').index(this);
+        var objectId = $('.comment-content:eq('+indx+')').data('comment-id');
+        $.ajax({
+            type: 'POST',
+            url: '/likes/',
+            data: {
+                'content_type': 'Comment',
+                'object_id': objectId,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: likeComment,
+            error: function () {
+                alert('Need to login');
+            },
+            dataType: 'html'
+        });
 
-            });
-    }
+        function likeComment(data, textStatus, jqXHR){
+            like_span_id = '#thumb_comment_' + objectId;
+            $(like_span_id).html(data);
+        }
+        event.preventDefault();
+    });
 
-    setOnClickForLikes();
     updateComments();
-
     window.setInterval(updateComments, 3000);
 });
