@@ -19,6 +19,13 @@
                     <div>{{ post.text }}</div>
                 </article>
             {% endfor %}
+            {% if posts_count == 0%}
+                <article class="card">
+                    <h3><i>{{ author.username }}</i> have not any post</h3>
+                    <hr>
+                    <div>May be some later</div>
+                </article>
+            {% endif %}
 
             {% include "core/page_navigator.html" %}
         </article>

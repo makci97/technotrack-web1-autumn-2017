@@ -20,6 +20,13 @@
                     <div>{{ blog.description }}</div>
                 </article>
             {% endfor %}
+            {% if blogs_count == 0%}
+                <article class="card">
+                    <h3><i>{{ author.username }}</i> have not any blog</h3>
+                    <hr>
+                    <div>May be some later</div>
+                </article>
+            {% endif %}
 
             {% include "core/page_navigator.html" %}
         </article>
