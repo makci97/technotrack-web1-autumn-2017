@@ -30,6 +30,7 @@ def post_detail(request, pk):
         request.user.id == post.blog.author.id
     )
     context['comments'] = Comment.objects.all().filter(post_id=post.id)
+    context['author'] = post.author
     for comment in context['comments']:
         comment.create_like_fields(request.user)
     return render(request, 'post/post_page.html', context)

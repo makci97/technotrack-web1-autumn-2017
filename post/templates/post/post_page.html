@@ -52,7 +52,7 @@
                 </header>
                 <hr>
                 <p>
-                    Author: <a href="{% url "core:user_blogs_list" pk=post.author.id %}">{{ user.username }}</a>
+                    Author: <a href="{% url "core:user_blogs_list" pk=post.author.id %}">{{ author.username }}</a>
                 </p>
                 <p>
                     Created at: {{ post.created_at|date:"D d M Y f" }}
