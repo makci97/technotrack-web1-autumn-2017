@@ -198,8 +198,8 @@ main>header {
 
 /* ------------------------ footer ----------------------*/
 footer {
-	position: relative;
-	right: 0;
+	position: absolute;
+	width: 100%;
 	bottom: 0;
 	left: 0;
 	padding: 1rem;
@@ -269,7 +269,15 @@ footer {
 }
 
 body {
+  	position: relative;
     background-color: #F4F4F4;
+  	min-height: 100%;
+  	padding-bottom: 6rem;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
 }
 
 a {
