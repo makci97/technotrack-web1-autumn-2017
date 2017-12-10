@@ -11,6 +11,8 @@ class SignUpForm(UserCreationForm):
 
     def clean_avatar(self):
         avatar = self.cleaned_data['avatar']
+        if avatar is None:
+            return avatar
         try:
             w, h = get_image_dimensions(avatar)
 
