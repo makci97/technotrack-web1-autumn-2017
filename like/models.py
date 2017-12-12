@@ -22,7 +22,7 @@ class Like(models.Model):
         if user.is_anonymous:
             return False
         content_type = ContentType.objects.get_for_model(liked_obj)
-        like = Like.objects.all().filter(content_type=content_type, object_id=liked_obj.id)
+        like = Like.objects.all().filter(content_type=content_type, object_id=liked_obj.id, user_id=user.id)
         if like.count() == 0 or not like.first().liked:
             return False
         return True
