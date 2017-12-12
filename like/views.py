@@ -24,7 +24,8 @@ def like_it(request):
 
 
 def like_comment(request, object_id, likes, like_obj, user):
-    content_type = ContentType.objects.get(Comment.objects.all().first())
+    content_type = ContentType.objects.get_for_model(Comment.objects.all().first())
+    # content_type = ContentType.objects.get(Comment.objects.all().first())
     if str(user) not in str(likes):
         like_obj = Like.objects.create(user=user, liked=True, content_type=content_type, object_id=object_id)
     elif str(user) in str(likes) and like_obj.liked:
