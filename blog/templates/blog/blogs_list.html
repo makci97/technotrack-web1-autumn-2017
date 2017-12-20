@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load cache %}
 
 {% block title %}
     <title>List of blogs</title>
@@ -19,7 +20,12 @@
         <aside class="col-sm-4">
             <section class="sidebar-module sidebar-module-inset card">
                 <h3>Info</h3>
-                <p>Blogs count: {{ blogs_count }}</p>
+
+                <p>Blogs count:
+{#                    {% cache 20 "blogs_count"%}#}
+                        {{ blogs_count }}
+{#                    {% endcache %}#}
+                </p>
                 <br>
 
                 <p align="center">
