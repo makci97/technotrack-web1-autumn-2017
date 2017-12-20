@@ -28,7 +28,8 @@ class BlogList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BlogList, self).get_context_data(**kwargs)
-        context['blogs_count'] = Blog.objects.all().count()
+        context['blogs_count'] = context['blogs'].count()
+        # context['blogs_count'] = Blog.objects.all().count()
         context['form'] = self.form
         return context
 

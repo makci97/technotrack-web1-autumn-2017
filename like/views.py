@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render
+from django.db import models
 
 from comments.models import Comment
 from like.models import Like
@@ -24,17 +25,20 @@ def like_it(request):
 
 
 def like_comment(request, object_id, likes, like_obj, user):
-    content_type = ContentType.objects.get_for_model(Comment.objects.all().first())
+    comment = Comment.objects.all().filter(pk=object_id).first()
+    content_type = ContentType.objects.get_for_model(comment)
     # content_type = ContentType.objects.get(Comment.objects.all().first())
     if str(user) not in str(likes):
         like_obj = Like.objects.create(user=user, liked=True, content_type=content_type, object_id=object_id)
+        comment.like_add()
     elif str(user) in str(likes) and like_obj.liked:
         like_obj.liked = False
+        comment.like_del()
     elif str(user) in str(likes) and not like_obj.liked:
         like_obj.liked = True
+        comment.like_add()
     like_obj.save()
 
-    comment = Comment.objects.all().filter(pk=object_id).first()
     comment.create_like_fields(user)
     context = {'comment': comment}
 

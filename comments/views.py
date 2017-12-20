@@ -1,21 +1,16 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
+from django.db import models
 
 from comments.forms import CommentForm
 from comments.models import Comment
-from django.template.defaulttags import register
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 
 from like.models import Like
 from post.models import Post
-
-
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
 
 
 class CommentsList(ListView):
@@ -25,16 +20,33 @@ class CommentsList(ListView):
 
     def dispatch(self, request, post_id=None, *args, **kwargs):
         self.post_id = post_id
+        for comment in Comment.objects.all():
+            comment.create_like_fields(self.request.user)
+            Comment.objects.filter(id=comment.id).update(likes_count=comment.likes_count)
         return super(CommentsList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        self.queryset = super(CommentsList, self).get_queryset().filter(post_id=self.post_id)
+        self.queryset = super(CommentsList, self).get_queryset().filter(post_id=self.post_id).annotate(
+            # likes_count=models.Sum(
+            #     models.Case(
+            #         models.When(likes__liked=True, then=1),
+            #         default=0, output_field=models.IntegerField()
+            #     )
+            # ),
+            is_liked=models.Sum(
+                models.Case(
+                    models.When(likes__liked=True, likes__user_id=self.request.user.id, then=1),
+                    default=0, output_field=models.IntegerField()
+                ), output_field=models.BooleanField()
+            )
+        )
+
         return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super(CommentsList, self).get_context_data(**kwargs)
-        for comment in context['comments']:
-            comment.create_like_fields(self.request.user)
+        # for comment in context['comments']:
+        #     comment.create_like_fields(self.request.user)
         return context
 
 

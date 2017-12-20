@@ -1,12 +1,11 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
-from django.shortcuts import reverse, get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import CreateView, UpdateView, ListView
+from django.db import models
 
 from blog.models import Blog
-from comments.forms import CommentForm
 from comments.models import Comment
-from like.models import Like
 from post.forms import PostsListForm
 from post.models import Post
 
@@ -15,24 +14,27 @@ def post_detail(request, pk):
     post = get_object_or_404(Post.objects.all(), id=pk)
     context = {'post': post}
     context['post_id'] = post.id
-    # if request.method == 'POST':
-    #     form = CommentForm(request.POST, user=request.user)
-    #     if form.is_valid():
-    #         comment = form.save(commit=False)
-    #         comment.author = request.user
-    #         comment.post = post
-    #         comment.save()
-    #         return redirect('post:post_detail', pk=pk)
-    # else:
-    #     form = CommentForm(user=request.user)
-    # context['form'] = form
     context['can_edit'] = (
         request.user.id == post.blog.author.id
     )
-    context['comments'] = Comment.objects.all().filter(post_id=post.id)
+    context['comments'] = Comment.objects.all().filter(post_id=post.id).annotate(
+        # likes_count=models.Sum(
+        #     models.Case(
+        #         models.When(likes__liked=True, then=1),
+        #         default=0, output_field=models.IntegerField()
+        #     )
+        # ),
+        is_liked=models.Sum(
+            models.Case(
+                models.When(likes__liked=True, likes__user_id=request.user.id, then=1),
+                default=0, output_field=models.IntegerField()
+            ), output_field=models.BooleanField()
+        )
+    )
     context['author'] = post.author
-    for comment in context['comments']:
-        comment.create_like_fields(request.user)
+    # context['comments'] = Comment.objects.all().filter(post_id=post.id)
+    # for comment in context['comments']:
+    #     comment.create_like_fields(request.user)
     return render(request, 'post/post_page.html', context)
 
 
@@ -111,7 +113,8 @@ class PostList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
-        context['posts_count'] = Post.objects.all().count()
+        context['posts_count'] = context['posts'].count()
+        # context['posts_count'] = Post.objects.all().count()
         context['form'] = self.form
         return context
 
