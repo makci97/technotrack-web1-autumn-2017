@@ -252,10 +252,27 @@ footer {
 	border: 1px solid #679E42;
 }
 
+/* ------------------------ delete_button ----------------------*/
+.delete_button {
+	color: darkgray;
+	border: 1px solid grey;
+	margin-left: 3px;
+}
+
+.delete_button:hover {
+	color: black;
+	border: 1px solid grey;
+	margin-left: 3px;
+}
+
 
 /* ------------------------ other ----------------------*/
 .pull-right {
     float: right;
+}
+
+.deleted {
+	opacity: 0.5;
 }
 
 @media (min-width: 1200px) {

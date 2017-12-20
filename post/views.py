@@ -17,7 +17,9 @@ def post_detail(request, pk):
     context['can_edit'] = (
         request.user.id == post.blog.author.id
     )
-    context['comments'] = Comment.objects.all().filter(post_id=post.id).annotate(
+    context['comments'] = Comment.objects.all().filter(
+            models.Q(post_id=post.id) & (models.Q(is_deleted=False) | models.Q(post__author_id=request.user.id))
+        ).annotate(
         # likes_count=models.Sum(
         #     models.Case(
         #         models.When(likes__liked=True, then=1),
@@ -29,6 +31,10 @@ def post_detail(request, pk):
                 models.When(likes__liked=True, likes__user_id=request.user.id, then=1),
                 default=0, output_field=models.IntegerField()
             ), output_field=models.BooleanField()
+        ),
+        is_invisible=models.Case(
+            models.When(models.Q(is_deleted=True) & models.Q(post__author_id=request.user.id), then=True),
+            default=False, output_field=models.BooleanField()
         )
     )
     context['author'] = post.author

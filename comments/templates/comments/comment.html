@@ -1,0 +1,29 @@
+{% if comment.is_invisible %}
+    <div class="deleted">
+{% endif %}
+    <div class="avatar">
+        <img src="{{ comment.author.avatar.url }}">
+    </div>
+    <div class="comment-body">
+        <div class="comment-header">
+            <b>{{ comment.author }}</b>, {{comment.created_at|date:"d M Y f"}}
+            {% if comment.updated_at|date:"d M Y f" != comment.created_at|date:"d M Y f" %}
+                , <i>updated {{comment.updated_at|date:"d M Y f"}}</i>
+            {% endif %}
+            {% if comment.post.author.id == user.id %}
+                <span class="pull-right delete_button">
+                    x
+                </span>
+            {% endif %}
+
+            <span class="pull-right" id="thumb_comment_{{ comment.id }}">
+                {% include "like/like_comment.html"%}
+            </span>
+        </div>
+        <div class="comment-message-container">
+            {{comment.text}}
+        </div>
+    </div>
+{% if comment.is_invisible %}
+    </div>
+{% endif %}

@@ -30,12 +30,21 @@ class Comment(models.Model):
         self.is_liked = Like.get_liked_by_user_and_obj(user, self)
 
     def like_add(self):
-        self.likes_count += 1
+        Comment.objects.filter(id=self.id).update(likes_count=models.F('likes_count') + 1)
 
     def like_del(self):
-        self.likes_count -= 1
+        Comment.objects.filter(id=self.id).update(likes_count=models.F('likes_count') - 1)
+
+    def change_is_deleted(self):
+        # Comment.objects.filter(id=self.id).update(is_deleted=xor(models.F("is_deleted"), True))
+        Comment.objects.filter(id=self.id).update(is_deleted=xor(self.is_deleted, True))
+
 
     class Meta:
         ordering = '-id',
         verbose_name = u'Comment'
         verbose_name_plural = u'Comments'
+
+
+def xor(a, b):
+    return bool(a) is not bool(b)

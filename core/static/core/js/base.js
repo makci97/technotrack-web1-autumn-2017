@@ -57,6 +57,32 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
+
+    $(document).on('click', '.delete_button', function (event) {
+        var indx = $('.delete_button').index(this);
+        var objectId = $('.comment-content:eq('+indx+')').data('comment-id');
+        $.ajax({
+            type: 'POST',
+            url: '/comments/delete/',
+            data: {
+                'content_type': 'Comment',
+                'object_id': objectId,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: deleteComment,
+            error: function () {
+                alert('Need to login');
+            },
+            dataType: 'html'
+        });
+
+        function deleteComment(data, textStatus, jqXHR){
+            comment_div_id = '#comment' + objectId;
+            $(comment_div_id).html(data);
+        }
+        event.preventDefault();
+    });
+
     updateComments();
     window.setInterval(updateComments, 3000);
 });

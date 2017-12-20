@@ -7,7 +7,7 @@ from django.db import models
 
 from comments.forms import CommentForm
 from comments.models import Comment
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from like.models import Like
 from post.models import Post
@@ -20,13 +20,16 @@ class CommentsList(ListView):
 
     def dispatch(self, request, post_id=None, *args, **kwargs):
         self.post_id = post_id
-        for comment in Comment.objects.all():
-            comment.create_like_fields(self.request.user)
-            Comment.objects.filter(id=comment.id).update(likes_count=comment.likes_count)
+        # for comment in Comment.objects.all():
+        #     comment.create_like_fields(self.request.user)
+        #     Comment.objects.filter(id=comment.id).update(likes_count=comment.likes_count)
         return super(CommentsList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        self.queryset = super(CommentsList, self).get_queryset().filter(post_id=self.post_id).annotate(
+        self.queryset = super(CommentsList, self).get_queryset().filter(
+            models.Q(post_id=self.post_id) & (
+            models.Q(is_deleted=False) | models.Q(post__author_id=self.request.user.id))
+        ).annotate(
             # likes_count=models.Sum(
             #     models.Case(
             #         models.When(likes__liked=True, then=1),
@@ -38,6 +41,10 @@ class CommentsList(ListView):
                     models.When(likes__liked=True, likes__user_id=self.request.user.id, then=1),
                     default=0, output_field=models.IntegerField()
                 ), output_field=models.BooleanField()
+            ),
+            is_invisible=models.Case(
+                models.When(models.Q(is_deleted=True) & models.Q(post__author_id=self.request.user.id), then=True),
+                default=False, output_field=models.BooleanField()
             )
         )
 
@@ -55,6 +62,7 @@ class AjaxableResponseMixin(object):
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
     """
+
     def form_invalid(self, form):
         response = super(AjaxableResponseMixin, self).form_invalid(form)
         if self.request.is_ajax():
@@ -107,3 +115,56 @@ class NewComment(AjaxableResponseMixin, CreateView):
         form.instance.author = self.request.user
         form.instance.post = Post.objects.all().filter(id=self.post_id).first()
         return super(NewComment, self).form_valid(form)
+
+
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import render
+from django.db import models
+
+from comments.models import Comment
+from like.models import Like
+
+
+def delete_it(request):
+    user = request.user
+    if request.method == 'POST':
+        object_id = int(request.POST['object_id'])
+        content_type_name = str(request.POST['content_type'])
+
+        if content_type_name == 'Comment':
+            obj = Comment.objects.filter(pk=object_id).first()
+            return delete_comment(request, obj, user)
+
+    return HttpResponse(content="Can't delete", status=500)
+
+
+def delete_comment(request, obj, user):
+    comment = obj
+    if comment.post.author.id == user.id:
+        comment.change_is_deleted()
+        context = {'comment':
+            Comment.objects.filter(id=comment.id).filter(
+                models.Q(post_id=comment.post.id) & (models.Q(is_deleted=False) | models.Q(post__author_id=user.id))
+            ).annotate(
+                # likes_count=models.Sum(
+                #     models.Case(
+                #         models.When(likes__liked=True, then=1),
+                #         default=0, output_field=models.IntegerField()
+                #     )
+                # ),
+                is_liked=models.Sum(
+                    models.Case(
+                        models.When(likes__liked=True, likes__user_id=user.id, then=1),
+                        default=0, output_field=models.IntegerField()
+                    ), output_field=models.BooleanField()
+                ),
+                is_invisible=models.Case(
+                    models.When(models.Q(is_deleted=True) & models.Q(post__author_id=user.id), then=True),
+                    default=False, output_field=models.BooleanField()
+                )
+            ).first()
+        }
+
+        return render(request, 'comments/comment.html', context)
+
+    return HttpResponse(content="Can't delete", status=404)

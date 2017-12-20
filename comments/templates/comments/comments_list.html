@@ -1,25 +1,33 @@
 {% for comment in comments %}
-    {% if not comment.is_deleted %}
-        <div class="comment-content" data-comment-id="{{ comment.id }}">
-            <div class="avatar">
-                <img src="{{ comment.author.avatar.url }}">
-            </div>
-            <div class="comment-body">
-                <div class="comment-header">
-                    <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}
-                    {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}
-                        , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>
-                    {% endif %}
-
-                    <span class="pull-right" id="thumb_comment_{{ comment.id }}">
-                        {% include "like/like_comment.html"%}
-                    </span>
-                </div>
-                <div class="comment-message-container">
-                    {{comment.text}}
-                </div>
-            </div>
-        </div>
-
-    {% endif %}
+    <div class="comment-content" id="comment{{ comment.id }}" data-comment-id="{{ comment.id }}">
+        {% include "comments/comment.html" %}
+    </div>
+{#    {% if not comment.is_invisible %}#}
+{#        <div class="comment-content" data-comment-id="{{ comment.id }}">#}
+{#            <div class="avatar">#}
+{#                <img src="{{ comment.author.avatar.url }}">#}
+{#            </div>#}
+{#            <div class="comment-body">#}
+{#                <div class="comment-header">#}
+{#                    <b>{{ comment.author }}</b>, {{comment.created_at|date:"D d M Y f"}}#}
+{#                    {% if comment.updated_at|date:"D d M Y f" != comment.created_at|date:"D d M Y f" %}#}
+{#                        , <i>updated at {{comment.updated_at|date:"D d M Y f"}}</i>#}
+{#                    {% endif %}#}
+{#                    {% if comment.post.author.id == user.id %}#}
+{#                        <span class="pull-right delete_button"  id="delete_button{{ comment.id }}">#}
+{#                            x#}
+{#                        </span>#}
+{#                    {% endif %}#}
+{##}
+{#                    <span class="pull-right" id="thumb_comment_{{ comment.id }}">#}
+{#                        {% include "like/like_comment.html"%}#}
+{#                    </span>#}
+{#                </div>#}
+{#                <div class="comment-message-container">#}
+{#                    {{comment.text}}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#    {% endif %}#}
 {% endfor %}
