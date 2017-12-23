@@ -15,14 +15,25 @@ from core.forms import UserEditForm
 from core.models import Category
 from post.forms import PostsListForm
 from post.models import Post
+from application import cache
 
 
 def index(request):
-    context = {
-        'Blog_count': Blog.objects.all().count(),
-        'Post_count': Post.objects.all().count(),
-        'Comment_count': Comment.objects.all().count(),
-    }
+    context = {}
+    context['Blog_count'] = cache.get('all_blogs_count')
+    if context['Blog_count'] is None:
+        context['Blog_count'] = Blog.objects.all().count()
+        cache.set('all_blogs_count', context['Blog_count'], 10)
+
+    context['Post_count'] = cache.get('all_posts_count')
+    if context['Post_count'] is None:
+        context['Post_count'] = Post.objects.all().count()
+        cache.set('all_posts_count', context['Post_count'], 10)
+
+    context['Comment_count'] = cache.get('all_comments_count')
+    if context['Comment_count'] is None:
+        context['Comment_count'] = Comment.objects.all().count()
+        cache.set('all_comments_count', context['Comment_count'], 10)
     return render(request, 'core/index.html', context)
 
 

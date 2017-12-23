@@ -8,6 +8,7 @@ from blog.forms import BlogsListForm
 from blog.models import Blog
 from post.forms import PostsListForm
 from post.models import Post
+from application import cache
 
 
 class BlogList(ListView):
