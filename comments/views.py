@@ -117,14 +117,6 @@ class NewComment(AjaxableResponseMixin, CreateView):
         return super(NewComment, self).form_valid(form)
 
 
-from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render
-from django.db import models
-
-from comments.models import Comment
-from like.models import Like
-
-
 def delete_it(request):
     user = request.user
     if request.method == 'POST':

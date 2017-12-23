@@ -1,5 +1,5 @@
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import CreateView, UpdateView, ListView
 from django.db import models
@@ -11,7 +11,10 @@ from post.models import Post
 
 
 def post_detail(request, pk):
-    post = get_object_or_404(Post.objects.all(), id=pk)
+    # post = get_object_or_404(Post.objects.all(), id=pk)
+    post = Post.objects.filter(id=pk).select_related('blog__author', 'author').first()
+    if post is None:
+        return Http404('No post matches the given query.')
     context = {'post': post}
     context['post_id'] = post.id
     context['can_edit'] = (
